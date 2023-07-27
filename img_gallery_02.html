@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02_문서객체조작 메서드를 활용한 이미지 슬라이드</title>
+    <!-- 6. 아이콘폰트 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" type="text/css">
+    <style>
+        .gallery *{margin: 0;padding: 0;}
+        a{text-decoration: none;color: #333;}
+        ul,li{list-style: none;}
+        .gallery{
+            width: 534px;height: 425px;/*이미지 하나의 넓이, 높이:340+85*/
+            border: 3px solid #000;
+            margin: 0px auto;
+            position: relative;
+        }
+        .gallery ul{
+            display: flex;
+        }
+        .gallery ul li{
+            width: 25%;height: 85px;overflow: hidden;
+        }
+        .gallery ul li img{
+            width: 100%;
+            transition: 0.3s;
+        }
+        .gallery ul li img:hover{
+            filter: brightness(1.1);transform: scale(1.1);
+        }
+        .gallery i.fas{
+            position: absolute;
+            font-size: 30px;
+            color: #fff;
+            padding: 5px 8px;
+            background: rgba(0,0,0,0.7);
+            top: 57%;cursor: pointer;
+        }
+        .act{
+            background: rgba(255,0,0,0.7) !important;
+            transform: rotate(-180deg);
+        }
+        i.fa-angle-right{
+            right: 0;
+        }
+        i.fa-angle-left{
+            left: 0;
+        }
+        .big_img img{
+            border: 1px solid red;
+        }
+        
+    </style>
+</head>
+<body>
+    <h2>>02_문서객체조작 메서드를 활용한 이미지 슬라이드</h2>
+    <p>갤러리 박스 안에 목록태그를 작성하여 4장의 메뉴 이미지를 삽입하고, 목록태그 아래 배너박스를 만들어서 큰 사진이 나오도록 한다.</p>
+    <p>4장의 썸네일 이미지를 클릭시 attr 속성값을 변수에 담아 큰사진의 이미지 경로에 대입하여 변경하도록 한다.</p>
+    <p>좌, 우버튼을 만들고, 클릭시 해당하는 배너이미지가 순차적으로 변경될 수 있도록 함수를 작성하여 구현한다. 이때 주의할 점은 썸네일 이미지와 클릭한 이미지가 좌,우버튼 클릭시 순서가 일치하도록 해야한다.</p>
+
+    <article class="gallery">
+        <ul>
+            <li><a href="#" title=""><img src="./images/01.jpg" alt=""></a></li>
+            <li><a href="#" title=""><img src="./images/02.jpg" alt=""></a></li>
+            <li><a href="#" title=""><img src="./images/03.jpg" alt=""></a></li>
+            <li><a href="#" title=""><img src="./images/04.jpg" alt=""></a></li>
+        </ul>
+        <div class="big_img">
+            <img src="./images/01.jpg" alt="">
+        </div>
+        <i class="fas fa-angle-left"></i>
+        <i class="fas fa-angle-right"></i>
+    </article>
+
+      <!-- 제이쿼리 라이브러리 cdn방식-->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+      <script>
+        //.갤러리의 li의 img를 클릭하면 빅이미지의 src가 갤러리의 href로 바뀐다.
+        $(document).ready(function(){
+            //1. 변수선언
+            // let gnb = $('.gallery ul li img');
+            let gnb = $('.gallery ul li')//여기에 인덱스()+1;하면 안나왔음,,
+
+
+            //2. 썸네일(gnb)이미지에 마우스 클릭시 href 속성값을 변수에 담는다.
+            gnb.click(function(){
+                //let src =$(this).attr('src');
+                n = $(this).index()+1;
+                
+                // console.log(src);
+                console.log(n);//1,2,3,4
+
+
+               // $('.big_img img').attr('src',src);//빅 이미지의 src를 변수 src값으로 바꿔라
+               $('.big_img img').attr('src','./images/0'+n+'.jpg').css('opacity','0').animate({'opacity':'1'},500);
+                return false;//페이지 올라가는것(새로고침) 방지
+            });
+
+            let n = 1;
+            const l_btn=$('i.fa-angle-left');
+            const r_btn=$('i.fa-angle-right');
+
+            l_btn.click(function(){
+                if(n==1){
+                    n=4;
+                }else{
+                    n--;
+                }
+                //사진 페이드인, 아웃효과 내기
+                $('.big_img img').attr('src','./images/0'+n+'.jpg').css('opacity','0').animate({'opacity':'1'},500);
+                                                                    //이미지를 일단 숨긴 후, 애니메이트 줘서 나오게 하기
+            });
+
+            r_btn.click(function(){
+                if(n==4){
+                    n=1;
+                }else{
+                    n++;
+                }
+                $('.big_img img').attr('src','./images/0'+n+'.jpg').css('opacity','0').animate({'opacity':'1'},500);
+            });
+            
+        });
+      </script>
+</body>
+</html>
